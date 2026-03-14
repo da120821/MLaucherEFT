@@ -76,9 +76,9 @@ class Ui_Dialog(object):
             background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
             stop:0 rgba(55, 144, 40, 255), stop:1 rgba(155, 163, 9));
         """)
-
+        Dialog.setFixedSize(942, 620)
         self.groupBox = QtWidgets.QGroupBox(Dialog)
-        self.groupBox.setGeometry(QtCore.QRect(-10, 530, 951, 91))
+        self.groupBox.setGeometry(QtCore.QRect(-1, 530, 951, 100))
         self.groupBox.setStyleSheet("background-color: rgb(255, 255, 255, 20%);")
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
@@ -121,7 +121,7 @@ class Ui_Dialog(object):
         self.label.setObjectName("label")
 
         self.label_1 = QtWidgets.QLabel(Dialog)  # ИСПРАВЛЕНО: название из UI
-        self.label_1.setGeometry(QtCore.QRect(0, 0, 941, 621))
+        self.label_1.setGeometry(QtCore.QRect(0, 0, 942, 620))
         self.label_1.setText("")
         self.label_1.setPixmap(QtGui.QPixmap("assets/mainimage.jpg"))
         self.label_1.setScaledContents(True)
