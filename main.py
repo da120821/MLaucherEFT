@@ -42,15 +42,10 @@ class LaunchThread(QtCore.QThread):
 
     def run(self):
         self.state_update_signal.emit(True)
-
         minecraft_launcher_lib.install.install_minecraft_version(
             version=self.version_id,
             minecraft_directory=minecraft_directory,
-            callback={
-                'setStatus': self.update_progress_label,
-                'setProgress': self.update_progress,
-                'setMax': self.update_progress_max
-            }
+            callback={'setStatus': self.update_progress_label, 'setProgress': self.update_progress, 'setMax': self.update_progress_max}
         )
 
         username = self.username
@@ -111,26 +106,26 @@ class Ui_Dialog(object):
         for version in minecraft_launcher_lib.utils.get_version_list():
             self.VersionSelect.addItem(version['id'])
 
-        self.start_progress_label = QtWidgets.QLabel(self.groupBox)  # ИСПРАВЛЕНО: имя как в оригинале
-        self.start_progress_label.setGeometry(QtCore.QRect(230, 45, 581, 21))
-        self.start_progress_label.setText("")
-        self.start_progress_label.setStyleSheet("color: white;")
-        self.start_progress_label.setVisible(False)
-        self.start_progress_label.setObjectName("start_progress_label")
-
         self.progressBar = QtWidgets.QProgressBar(self.groupBox)
         self.progressBar.setGeometry(QtCore.QRect(230, 20, 581, 21))
-        self.progressBar.setStyleSheet("color: rgb(215, 250, 255); background-color: white;")
+        self.progressBar.setStyleSheet("color: rgb(215, 250, 255);")
         self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName("progressBar")
         self.progressBar.setVisible(False)
 
-        self.background_label = QtWidgets.QLabel(Dialog)  # ИСПРАВЛЕНО: для фона
-        self.background_label.setGeometry(QtCore.QRect(0, 0, 941, 621))
-        self.background_label.setText("")
-        self.background_label.setPixmap(QtGui.QPixmap("assets/mainimage.jpg"))
-        self.background_label.setScaledContents(True)
-        self.background_label.setObjectName("background_label")
+        self.label = QtWidgets.QLabel(self.groupBox)  # ИСПРАВЛЕНО: название из UI
+        self.label.setGeometry(QtCore.QRect(230, 50, 541, 21))
+        self.label.setText("")
+        self.label.setStyleSheet("color: white;")
+        self.label.setVisible(False)
+        self.label.setObjectName("label")
+
+        self.label_1 = QtWidgets.QLabel(Dialog)  # ИСПРАВЛЕНО: название из UI
+        self.label_1.setGeometry(QtCore.QRect(0, 0, 941, 621))
+        self.label_1.setText("")
+        self.label_1.setPixmap(QtGui.QPixmap("assets/mainimage.jpg"))
+        self.label_1.setScaledContents(True)
+        self.label_1.setObjectName("label_1")
 
         self.groupBox_2 = QtWidgets.QGroupBox(Dialog)
         self.groupBox_2.setGeometry(QtCore.QRect(30, 30, 761, 481))
@@ -139,7 +134,7 @@ class Ui_Dialog(object):
         self.groupBox_2.setObjectName("groupBox_2")
 
         # Порядок отображения
-        self.background_label.raise_()
+        self.label_1.raise_()
         self.groupBox.raise_()
         self.groupBox_2.raise_()
 
@@ -147,7 +142,7 @@ class Ui_Dialog(object):
 
         self.launch_thread = LaunchThread()
         self.launch_thread.state_update_signal.connect(self.state_update)
-        self.launch_thread.progress_update_signal.connect(self.update_progress)  # ИСПРАВЛЕНО: раскомментировал
+        self.launch_thread.progress_update_signal.connect(self.update_progress)
 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -158,17 +153,16 @@ class Ui_Dialog(object):
 
     def state_update(self, value):
         self.Start.setDisabled(value)
-        self.start_progress_label.setVisible(value)  # ИСПРАВЛЕНО
+        self.label.setVisible(value)  # ИСПРАВЛЕНО: используем label
         self.progressBar.setVisible(value)
 
     def update_progress(self, progress, max_progress, label):
         if max_progress > 0:
             self.progressBar.setMaximum(max_progress)
         self.progressBar.setValue(progress)
-        self.start_progress_label.setText(label)  # ИСПРАВЛЕНО
+        self.label.setText(label)  # ИСПРАВЛЕНО: используем label
 
     def launch_game(self):
-        # ИСПРАВЛЕНО: правильные имена виджетов
         version = self.VersionSelect.currentText()
         username = self.Username.text()
 
