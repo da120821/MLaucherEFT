@@ -1,0 +1,21 @@
+import minecraft_launcher_lib
+import subprocess
+
+from requests import options
+
+version = input('Enter minecraft version ');
+username = input('Enter minecraft username ');
+minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory().replace('minecraft','LauncherEFT');
+
+#установка Minecraft и всех его компонентов
+minecraft_launcher_lib.install.install_minecraft_version(version = version, minecraft_directory=minecraft_directory);
+
+
+#определение настроек установки
+options = {
+    'username': username,
+    'uuid': '',
+    'token': ''
+}
+
+subprocess.call(minecraft_launcher_lib.command.get_minecraft_command(version = version, minecraft_directory=minecraft_directory,options=options));
