@@ -17,20 +17,20 @@ from random_username.generate import generate_username
 
 
 
-minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory().replace('minecraft','LauncherEFT');
+minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory().replace('minecraft','LauncherEFT')
 
 class LaunchThread(QtCore.QThread):
     def run(self):
         #version = self.VersionSelect.currentText()
-        version = 'rd-132211'
-        minecraft_launcher_lib.install.install_minecraft_version(version=version,
-                                                        minecraft_directory=minecraft_directory)
+        version = '1.8.9'
+        minecraft_launcher_lib.install.install_minecraft_version(version=version,minecraft_directory=minecraft_directory)
         username = generate_username()[0]
         options = {
             'username': username,
             'uuid': str(uuid1()),
             'token': ''
          }
+        subprocess.call(minecraft_launcher_lib.command.get_minecraft_command(version=version,minecraft_directory=minecraft_directory,options=options))
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
