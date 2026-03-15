@@ -4,21 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="325e76b2-3871-412f-aa70-41e4029021b9" name="Changes" comment="0.1 + фикс&#10;Process finished with exit code -1073740791 (0xC0000409)">
+    <list default="true" id="325e76b2-3871-412f-aa70-41e4029021b9" name="Changes" comment="0.1.6 + версии + связь">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/main.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/warn-main.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/xref-main.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LauncherEFT.ui" beforeDir="false" afterPath="$PROJECT_DIR$/assets/ui/LauncherEFT.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/mainimage.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/assets/image/mainimage.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.spec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,25 +36,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.QMainWindow.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main3.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/da120/PythonProject/MServerTarkov/assets&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.QMainWindow.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.main2.executor": "Run",
+    "Python.main3.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/da120/PythonProject/MServerTarkov/assets"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\da120\PythonProject\MServerTarkov\assets" />
       <recent name="C:\Users\da120\PythonProject\MServerTarkov" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\da120\PythonProject\MServerTarkov\assets\image" />
+      <recent name="C:\Users\da120\PythonProject\MServerTarkov\assets\ui" />
       <recent name="C:\Users\da120\PythonProject\MServerTarkov" />
       <recent name="C:\Users\da120\PythonProject\MServerTarkov\assets" />
     </key>
@@ -124,7 +116,23 @@
       <option name="project" value="LOCAL" />
       <updated>1773515208561</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="0.1.5 + микро">
+      <option name="closed" value="true" />
+      <created>1773516741282</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1773516741282</updated>
+    </task>
+    <task id="LOCAL-00007" summary="0.1.6 + версии + связь">
+      <option name="closed" value="true" />
+      <created>1773540111727</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1773540111730</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -143,6 +151,8 @@
     <MESSAGE value="0.1 + мультипоток" />
     <MESSAGE value="0.1 - попытка исправить &#10;Process finished with exit code -1073740791 (0xC0000409)" />
     <MESSAGE value="0.1 + фикс&#10;Process finished with exit code -1073740791 (0xC0000409)" />
-    <option name="LAST_COMMIT_MESSAGE" value="0.1 + фикс&#10;Process finished with exit code -1073740791 (0xC0000409)" />
+    <MESSAGE value="0.1.5 + микро" />
+    <MESSAGE value="0.1.6 + версии + связь" />
+    <option name="LAST_COMMIT_MESSAGE" value="0.1.6 + версии + связь" />
   </component>
 </project>

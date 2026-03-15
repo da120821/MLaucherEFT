@@ -80,7 +80,7 @@ class Ui_Dialog(object):
         """)
         Dialog.setFixedSize(942, 620)
         self.groupBox = QtWidgets.QGroupBox(Dialog)
-        self.groupBox.setGeometry(QtCore.QRect(-10, 530, 951, 91))
+        self.groupBox.setGeometry(QtCore.QRect(-10, 530, 951, 90))
         self.groupBox.setStyleSheet("background-color: rgb(255, 255, 255, 20%);")
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
@@ -133,7 +133,7 @@ class Ui_Dialog(object):
         self.label_1 = QtWidgets.QLabel(Dialog)
         self.label_1.setGeometry(QtCore.QRect(0, 0, 941, 621))
         self.label_1.setText("")
-        self.label_1.setPixmap(QtGui.QPixmap("assets/mainimage.jpg"))
+        self.label_1.setPixmap(QtGui.QPixmap("assets/image/mainimage.jpg"))
         self.label_1.setScaledContents(True)
         self.label_1.setObjectName("label_1")
 
@@ -174,6 +174,7 @@ class Ui_Dialog(object):
         self.pushButton.setStyleSheet("background-color: rgb(255, 238, 175);\n"
                                       "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
         self.pushButton.setObjectName("pushButton")
+        self.pushButton.clicked.connect(self.telegram)
 
 
         #связь Discord
@@ -240,7 +241,7 @@ class Ui_Dialog(object):
         webbrowser.open("https://discord.gg/7M5QGSUM")
 
 if __name__ == "__main__":
-    QtWidgets.QApplication.setAttribute(QtCore.Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True)
+    #QtWidgets.QApplication.setAttribute(QtCore.Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True)
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
