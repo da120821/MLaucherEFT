@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import webbrowser
 import subprocess
 import minecraft_launcher_lib
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -45,7 +46,8 @@ class LaunchThread(QtCore.QThread):
         minecraft_launcher_lib.install.install_minecraft_version(
             version=self.version_id,
             minecraft_directory=minecraft_directory,
-            callback={'setStatus': self.update_progress_label, 'setProgress': self.update_progress, 'setMax': self.update_progress_max}
+            callback={'setStatus': self.update_progress_label, 'setProgress': self.update_progress,
+                      'setMax': self.update_progress_max}
         )
 
         username = self.username
@@ -78,7 +80,7 @@ class Ui_Dialog(object):
         """)
         Dialog.setFixedSize(942, 620)
         self.groupBox = QtWidgets.QGroupBox(Dialog)
-        self.groupBox.setGeometry(QtCore.QRect(-1, 530, 951, 100))
+        self.groupBox.setGeometry(QtCore.QRect(-10, 530, 951, 91))
         self.groupBox.setStyleSheet("background-color: rgb(255, 255, 255, 20%);")
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
@@ -86,25 +88,34 @@ class Ui_Dialog(object):
         self.Start = QtWidgets.QPushButton(self.groupBox)
         self.Start.setGeometry(QtCore.QRect(830, 20, 101, 23))
         self.Start.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Start.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.Start.setMouseTracking(False)
+        self.Start.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+                                 "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
         self.Start.setObjectName("Start")
         self.Start.clicked.connect(self.launch_game)
 
         self.Username = QtWidgets.QLineEdit(self.groupBox)
+        self.Username.setEnabled(True)
         self.Username.setGeometry(QtCore.QRect(40, 20, 181, 21))
-        self.Username.setStyleSheet("background-color: rgb(246, 255, 220);")
+        self.Username.setStyleSheet("background-color: rgb(246, 255, 220);\n"
+                                    "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.Username.setInputMask("")
+        self.Username.setText("")
         self.Username.setMaxLength(30)
-        self.Username.setPlaceholderText("Username")
+        self.Username.setFrame(False)
+        self.Username.setCursorPosition(0)
         self.Username.setObjectName("Username")
 
         self.VersionSelect = QtWidgets.QComboBox(self.groupBox)
         self.VersionSelect.setGeometry(QtCore.QRect(40, 50, 181, 22))
-        self.VersionSelect.setStyleSheet("background-color: rgb(246, 255, 220);")
+        self.VersionSelect.setStyleSheet("background-color: rgb(246, 255, 220);\n"
+                                         "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.VersionSelect.setCurrentText("")
         self.VersionSelect.setObjectName("VersionSelect")
 
-        # Получение списка версий
         for version in minecraft_launcher_lib.utils.get_version_list():
-            self.VersionSelect.addItem(version['id'])
+            if version['type'] == 'release':  # Только релизы
+                self.VersionSelect.addItem(version['id'])
 
         self.progressBar = QtWidgets.QProgressBar(self.groupBox)
         self.progressBar.setGeometry(QtCore.QRect(230, 20, 581, 21))
@@ -113,28 +124,74 @@ class Ui_Dialog(object):
         self.progressBar.setObjectName("progressBar")
         self.progressBar.setVisible(False)
 
-        self.label = QtWidgets.QLabel(self.groupBox)  # ИСПРАВЛЕНО: название из UI
-        self.label.setGeometry(QtCore.QRect(230, 50, 541, 21))
+        self.label = QtWidgets.QLabel(self.groupBox)
+        self.label.setGeometry(QtCore.QRect(230, 50, 581, 21))
         self.label.setText("")
-        self.label.setStyleSheet("color: white;")
-        self.label.setVisible(False)
         self.label.setObjectName("label")
+        self.label.setVisible(False)
 
-        self.label_1 = QtWidgets.QLabel(Dialog)  # ИСПРАВЛЕНО: название из UI
-        self.label_1.setGeometry(QtCore.QRect(0, 0, 942, 620))
+        self.label_1 = QtWidgets.QLabel(Dialog)
+        self.label_1.setGeometry(QtCore.QRect(0, 0, 941, 621))
         self.label_1.setText("")
         self.label_1.setPixmap(QtGui.QPixmap("assets/mainimage.jpg"))
         self.label_1.setScaledContents(True)
         self.label_1.setObjectName("label_1")
 
         self.groupBox_2 = QtWidgets.QGroupBox(Dialog)
-        self.groupBox_2.setGeometry(QtCore.QRect(30, 30, 761, 481))
-        self.groupBox_2.setStyleSheet("background-color:rgb(200, 194, 19, 45%)")
+        self.groupBox_2.setGeometry(QtCore.QRect(30, 30, 741, 481))
+        self.groupBox_2.setStyleSheet("background-color:rgb(200, 194, 19, 45%)\n"
+                                      "")
         self.groupBox_2.setTitle("")
         self.groupBox_2.setObjectName("groupBox_2")
 
-        # Порядок отображения
+        self.groupBox_3 = QtWidgets.QGroupBox(Dialog)
+        self.groupBox_3.setGeometry(QtCore.QRect(800, 30, 131, 481))
+        self.groupBox_3.setStyleSheet("background-color:rgb(200, 194, 19, 45%)\n"
+                                      "")
+        self.groupBox_3.setTitle("")
+        self.groupBox_3.setObjectName("groupBox_3")
+
+        self.label_2 = QtWidgets.QLabel(self.groupBox_3)
+        self.label_2.setGeometry(QtCore.QRect(10, 10, 111, 51))
+        self.label_2.setStyleSheet("background-color: rgb(255, 238, 175);\n"
+                                   "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.label_2.setTextFormat(QtCore.Qt.AutoText)
+        self.label_2.setScaledContents(True)
+        self.label_2.setWordWrap(True)
+        self.label_2.setObjectName("label_2")
+
+        #связь email
+        self.pushButton_2 = QtWidgets.QPushButton(self.groupBox_3)
+        self.pushButton_2.setGeometry(QtCore.QRect(10, 120, 111, 31))
+        self.pushButton_2.setStyleSheet("background-color: rgb(255, 238, 175);\n"
+                                        "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.email)
+
+        #связь Тг
+        self.pushButton = QtWidgets.QPushButton(self.groupBox_3)
+        self.pushButton.setGeometry(QtCore.QRect(10, 80, 111, 31))
+        self.pushButton.setStyleSheet("background-color: rgb(255, 238, 175);\n"
+                                      "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.pushButton.setObjectName("pushButton")
+
+
+        #связь Discord
+        self.pushButton_3 = QtWidgets.QPushButton(self.groupBox_3)
+        self.pushButton_3.setGeometry(QtCore.QRect(10, 160, 111, 31))
+        self.pushButton_3.setStyleSheet("background-color: rgb(255, 238, 175);\n"
+                                        "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_3.clicked.connect(self.discord)
+
+        self.pushButton_4 = QtWidgets.QPushButton(self.groupBox_3)
+        self.pushButton_4.setGeometry(QtCore.QRect(10, 440, 111, 31))
+        self.pushButton_4.setStyleSheet("background-color: rgb(255, 238, 175);\n"
+                                        "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.pushButton_4.setObjectName("pushButton_4")
+
         self.label_1.raise_()
+        self.groupBox_3.raise_()
         self.groupBox.raise_()
         self.groupBox_2.raise_()
 
@@ -148,31 +205,39 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Minecraft Launcher"))
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.Start.setText(_translate("Dialog", "Запуск"))
+        self.Username.setPlaceholderText(_translate("Dialog", " Username"))
+        self.label_2.setText(
+            _translate("Dialog", "<html><head/><body><p align=\"center\">Хочешь связаться с нами?</p></body></html>"))
+        self.pushButton_2.setText(_translate("Dialog", "EMAIL"))
+        self.pushButton.setText(_translate("Dialog", "TELEGRAM"))
+        self.pushButton_3.setText(_translate("Dialog", "DISCORD"))
+        self.pushButton_4.setText(_translate("Dialog", "Настройки"))
 
     def state_update(self, value):
         self.Start.setDisabled(value)
-        self.label.setVisible(value)  # ИСПРАВЛЕНО: используем label
+        self.label.setVisible(value)
         self.progressBar.setVisible(value)
 
     def update_progress(self, progress, max_progress, label):
         if max_progress > 0:
             self.progressBar.setMaximum(max_progress)
         self.progressBar.setValue(progress)
-        self.label.setText(label)  # ИСПРАВЛЕНО: используем label
+        self.label.setText(label)
 
     def launch_game(self):
-        version = self.VersionSelect.currentText()
-        username = self.Username.text()
-
-        if not version:
-            QtWidgets.QMessageBox.warning(None, "Ошибка", "Выберите версию Minecraft")
-            return
-
-        self.launch_thread.launch_setup_signal.emit(version, username)
+        self.launch_thread.launch_setup_signal.emit(self.VersionSelect.currentText(), self.Username.text())
         self.launch_thread.start()
 
+    def telegram(self):
+        webbrowser.open("https://t.me/Akira_Dev_Horu")
+
+    def email(self):
+        webbrowser.open("https://mail.google.com/mail/?view=cm&fs=1&to=mangamce@gmail.com")
+
+    def discord(self):
+        webbrowser.open("https://discord.gg/7M5QGSUM")
 
 if __name__ == "__main__":
     QtWidgets.QApplication.setAttribute(QtCore.Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True)
