@@ -6,6 +6,7 @@ import minecraft_launcher_lib
 from PyQt5 import QtCore, QtGui, QtWidgets
 from uuid import uuid1
 from random_username.generate import generate_username
+from setup import Ui_Setings
 
 minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory().replace('minecraft', 'LauncherEFT')
 
@@ -57,7 +58,10 @@ class LaunchThread(QtCore.QThread):
         options = {
             'username': username,
             'uuid': str(uuid1()),
-            'token': ''
+            'token': '',
+            'jvmArguments': [
+            '-Xms2G',
+            '-Xmx4G']
         }
 
         subprocess.call(
@@ -76,7 +80,7 @@ class Ui_Dialog(object):
         Dialog.resize(942, 620)
         Dialog.setStyleSheet("""
             background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
-            stop:0 rgba(55, 144, 40, 255), stop:1 rgba(155, 163, 9));
+            stop:0 rgba(158, 114, 47, 1), stop:1 rgba(87, 87, 87, 1));
         """)
         Dialog.setFixedSize(942, 620)
         self.groupBox = QtWidgets.QGroupBox(Dialog)
@@ -190,6 +194,7 @@ class Ui_Dialog(object):
         self.pushButton_4.setStyleSheet("background-color: rgb(255, 238, 175);\n"
                                         "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
         self.pushButton_4.setObjectName("pushButton_4")
+        self.pushButton_4.clicked.connect(self.open_settings)
 
         self.label_1.raise_()
         self.groupBox_3.raise_()
@@ -201,6 +206,7 @@ class Ui_Dialog(object):
         self.launch_thread = LaunchThread()
         self.launch_thread.state_update_signal.connect(self.state_update)
         self.launch_thread.progress_update_signal.connect(self.update_progress)
+
 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -240,9 +246,17 @@ class Ui_Dialog(object):
     def discord(self):
         webbrowser.open("https://discord.gg/7M5QGSUM")
 
+    def open_settings(self):
+
+        self.settings_window = QtWidgets.QWidget()
+        self.ui_settings = Ui_Setings()
+        self.ui_settings.setupUi(self.settings_window)
+        self.settings_window.show()
+
+
 if __name__ == "__main__":
-    #QtWidgets.QApplication.setAttribute(QtCore.Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True)
     import sys
+
 
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()

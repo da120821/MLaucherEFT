@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="325e76b2-3871-412f-aa70-41e4029021b9" name="Changes" comment="0.1.6 + версии + связь">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LauncherEFT.ui" beforeDir="false" afterPath="$PROJECT_DIR$/assets/ui/LauncherEFT.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/mainimage.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/assets/image/mainimage.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,9 +53,9 @@
       <recent name="C:\Users\da120\PythonProject\MServerTarkov" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\da120\PythonProject\MServerTarkov" />
       <recent name="C:\Users\da120\PythonProject\MServerTarkov\assets\image" />
       <recent name="C:\Users\da120\PythonProject\MServerTarkov\assets\ui" />
-      <recent name="C:\Users\da120\PythonProject\MServerTarkov" />
       <recent name="C:\Users\da120\PythonProject\MServerTarkov\assets" />
     </key>
   </component>
@@ -132,7 +130,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773540111730</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="0.1.6 + версии + связь">
+      <option name="closed" value="true" />
+      <created>1773570715037</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1773570715037</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
