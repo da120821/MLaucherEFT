@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>942</width>
+    <width>935</width>
     <height>620</height>
    </rect>
   </property>
@@ -136,6 +136,23 @@ font: 63 8pt &quot;Segoe UI Variable Text Semibold&quot;;</string>
      <string/>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>50</y>
+      <width>329</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 233, 255, 10%);
+font: 10pt &quot;Segoe UI Variable Text Semibold&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Только релизы / Все версии</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QLabel" name="label_1">
    <property name="geometry">
@@ -150,7 +167,7 @@ font: 63 8pt &quot;Segoe UI Variable Text Semibold&quot;;</string>
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>assets/mainimage.jpg</pixmap>
+    <pixmap>assets/image/mainimage.jpg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
