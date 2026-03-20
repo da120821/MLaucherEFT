@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import os
 import webbrowser
 import subprocess
 import minecraft_launcher_lib
@@ -10,9 +10,20 @@ from setup import Ui_Setings
 
 minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory().replace('minecraft', 'LauncherEFT')
 
+class LoadVersion(QtCore.QThread):
+    versions_loaded = QtCore.pyqtSignal(list)
+
+    def run(self):
+        versions = []
+        for version in minecraft_launcher_lib.utils.get_version_list():
+            if version['type'] == 'release':
+                versions.append(version['id'])
+        self.versions_loaded.emit(versions)
+
+
 
 class LaunchThread(QtCore.QThread):
-    launch_setup_signal = QtCore.pyqtSignal(str, str)
+    launch_setup_signal = QtCore.pyqtSignal(str, str,str)
     progress_update_signal = QtCore.pyqtSignal(int, int, str)
     state_update_signal = QtCore.pyqtSignal(bool)
 
@@ -26,9 +37,10 @@ class LaunchThread(QtCore.QThread):
         super().__init__()
         self.launch_setup_signal.connect(self.launch_setup)
 
-    def launch_setup(self, version_id, username):
+    def launch_setup(self, version_id, username, type_id):
         self.version_id = version_id
         self.username = username
+        self.type_id = type_id
 
     def update_progress_label(self, value):
         self.progress_label = value
@@ -41,6 +53,8 @@ class LaunchThread(QtCore.QThread):
     def update_progress_max(self, value):
         self.progress_max = value
         self.progress_update_signal.emit(self.progress, self.progress_max, self.progress_label)
+
+
 
     def run(self):
         self.state_update_signal.emit(True)
@@ -116,10 +130,9 @@ class Ui_Dialog(object):
                                          "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
         self.VersionSelect.setCurrentText("")
         self.VersionSelect.setObjectName("VersionSelect")
+        self.VersionSelect.addItem("Загрузка...")
 
-        for version in minecraft_launcher_lib.utils.get_version_list():
-            if version['type'] == 'release':  # Только релизы
-                self.VersionSelect.addItem(version['id'])
+
 
         self.progressBar = QtWidgets.QProgressBar(self.groupBox)
         self.progressBar.setGeometry(QtCore.QRect(230, 20, 581, 21))
@@ -196,6 +209,29 @@ class Ui_Dialog(object):
         self.pushButton_4.setObjectName("pushButton_4")
         self.pushButton_4.clicked.connect(self.open_settings)
 
+        self.open_folder = QtWidgets.QPushButton(self.groupBox)
+        self.open_folder.setGeometry(QtCore.QRect(830, 50, 101, 23))
+        self.open_folder.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.open_folder.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+                                       "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.open_folder.setObjectName("open_folder")
+        self.open_folder.clicked.connect(self.open_dir_launcher)
+
+
+        #выбрать версию vanila,fabric,neofogre,forge
+        self.VersionSelect_2 = QtWidgets.QComboBox(self.groupBox)
+        self.VersionSelect_2.setGeometry(QtCore.QRect(230, 50, 151, 22))
+        self.VersionSelect_2.setStyleSheet("background-color: rgb(246, 255, 220);\n"
+                                           "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
+        self.VersionSelect_2.setObjectName("VersionSelect_2")
+        self.VersionSelect_2.addItem("Vanilla")
+        self.VersionSelect_2.addItem("fabric")
+        self.VersionSelect_2.addItem("Forge")
+        self.VersionSelect_2.addItem("NeoForge")
+
+
+
+
         self.label_1.raise_()
         self.groupBox_3.raise_()
         self.groupBox.raise_()
@@ -203,6 +239,13 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
+        #поток обновления версий
+
+        self.version_thread = LoadVersion()
+        self.version_thread.versions_loaded.connect(self.on_versions_loaded)
+        self.version_thread.start()
+
+        #поток установки и запуска
         self.launch_thread = LaunchThread()
         self.launch_thread.state_update_signal.connect(self.state_update)
         self.launch_thread.progress_update_signal.connect(self.update_progress)
@@ -212,7 +255,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "MLauncherEFT"))
         self.Start.setText(_translate("Dialog", "Запуск"))
         self.Username.setPlaceholderText(_translate("Dialog", " Username"))
         self.label_2.setText(
@@ -221,6 +264,7 @@ class Ui_Dialog(object):
         self.pushButton.setText(_translate("Dialog", "TELEGRAM"))
         self.pushButton_3.setText(_translate("Dialog", "DISCORD"))
         self.pushButton_4.setText(_translate("Dialog", "Настройки"))
+        self.open_folder.setText(_translate("Dialog", "Открыть папку"))
 
     def state_update(self, value):
         self.Start.setDisabled(value)
@@ -234,8 +278,12 @@ class Ui_Dialog(object):
         self.label.setText(label)
 
     def launch_game(self):
-        self.launch_thread.launch_setup_signal.emit(self.VersionSelect.currentText(), self.Username.text())
+        version_id = self.VersionSelect.currentText()
+        type_id = self.VersionSelect_2.currentText()
+        username = self.Username.text()
+        self.launch_thread.launch_setup_signal.emit(version_id, type_id, username)
         self.launch_thread.start()
+
 
     def telegram(self):
         webbrowser.open("https://t.me/Akira_Dev_Horu")
@@ -253,6 +301,13 @@ class Ui_Dialog(object):
         self.ui_settings.setupUi(self.settings_window)
         self.settings_window.show()
 
+    def open_dir_launcher(self):
+        os.startfile(minecraft_directory)
+
+    def on_versions_loaded(self, versions):
+        self.VersionSelect.clear()
+        self.VersionSelect.addItems(versions)
+        self.VersionSelect.setEnabled(True)  # включаем обратно
 
 if __name__ == "__main__":
     import sys

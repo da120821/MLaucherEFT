@@ -27,8 +27,18 @@ class Ui_Setings(object):
         self.comboBox_2.setStyleSheet("background-color: rgb(255, 240, 202);")
         self.comboBox_2.setObjectName("comboBox_2")
         self.gridLayout.addWidget(self.comboBox_2, 1, 1, 1, 1)
+        self.MaxMemory_3 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.MaxMemory_3.setStyleSheet("background-color: rgb(255, 240, 202);\n"
+"padding:5%;\n"
+"font: 10pt \"Segoe UI Variable Text Semibold\";\n"
+"")
+        self.MaxMemory_3.setObjectName("MaxMemory_3")
+        self.gridLayout.addWidget(self.MaxMemory_3, 2, 0, 1, 1)
         self.MaxMemory_2 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.MaxMemory_2.setStyleSheet("background-color: rgb(255, 240, 202);")
+        self.MaxMemory_2.setStyleSheet("background-color: rgb(255, 240, 202);\n"
+"padding:5%;\n"
+"font: 10pt \"Segoe UI Variable Text Semibold\";\n"
+"")
         self.MaxMemory_2.setObjectName("MaxMemory_2")
         self.gridLayout.addWidget(self.MaxMemory_2, 0, 0, 1, 1)
         self.comboBox = QtWidgets.QComboBox(self.gridLayoutWidget)
@@ -36,29 +46,36 @@ class Ui_Setings(object):
         self.comboBox.setObjectName("comboBox")
         self.gridLayout.addWidget(self.comboBox, 0, 1, 1, 1)
         self.MaxMemory = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.MaxMemory.setStyleSheet("background-color: rgb(255, 240, 202);")
+        self.MaxMemory.setStyleSheet("background-color: rgb(255, 240, 202);\n"
+"padding:5%;\n"
+"font: 10pt \"Segoe UI Variable Text Semibold\";\n"
+"")
         self.MaxMemory.setObjectName("MaxMemory")
         self.gridLayout.addWidget(self.MaxMemory, 1, 0, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem, 3, 0, 1, 1)
-        self.MaxMemory_3 = QtWidgets.QLabel(self.gridLayoutWidget)
-        self.MaxMemory_3.setStyleSheet("background-color: rgb(255, 240, 202);")
-        self.MaxMemory_3.setObjectName("MaxMemory_3")
-        self.gridLayout.addWidget(self.MaxMemory_3, 2, 0, 1, 1)
+        self.gridLayout.addItem(spacerItem, 4, 0, 1, 1)
         self.comboBox_3 = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.comboBox_3.setStyleSheet("background-color: rgb(255, 240, 202);")
         self.comboBox_3.setObjectName("comboBox_3")
         self.gridLayout.addWidget(self.comboBox_3, 2, 1, 1, 1)
+        self.checkBox = QtWidgets.QCheckBox(self.gridLayoutWidget)
+        self.checkBox.setStyleSheet("background-color: rgb(255, 240, 202);\n"
+"padding:5%;\n"
+"font: 10pt \"Segoe UI Variable Text Semibold\";\n"
+"")
+        self.checkBox.setObjectName("checkBox")
+        self.gridLayout.addWidget(self.checkBox, 3, 0, 1, 1)
 
         self.retranslateUi(Setings)
         QtCore.QMetaObject.connectSlotsByName(Setings)
 
     def retranslateUi(self, Setings):
         _translate = QtCore.QCoreApplication.translate
-        Setings.setWindowTitle(_translate("Setings", "Form"))
-        self.MaxMemory_2.setText(_translate("Setings", "Максимальный размер выделенной памяти"))
-        self.MaxMemory.setText(_translate("Setings", "Максимальный размер выделенной памяти"))
+        Setings.setWindowTitle(_translate("Setings", "Настройки"))
         self.MaxMemory_3.setText(_translate("Setings", "Язык"))
+        self.MaxMemory_2.setText(_translate("Setings", "Максимальный размер выделенной памяти"))
+        self.MaxMemory.setText(_translate("Setings", "Минимальный размер выделенной памяти"))
+        self.checkBox.setText(_translate("Setings", "Только релизы / Все версии"))
 
 
 if __name__ == "__main__":
