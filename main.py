@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
+import json
 import os
+
 import webbrowser
 import subprocess
 import minecraft_launcher_lib
 from PyQt5 import QtCore, QtGui, QtWidgets
 from uuid import uuid1
+from PyQt5.QtWidgets import QMessageBox
 from random_username.generate import generate_username
 from setup import Ui_Setings
 
 minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory().replace('minecraft', 'LauncherEFT')
+
+
+
 
 class LoadVersion(QtCore.QThread):
     versions_loaded = QtCore.pyqtSignal(list)
@@ -26,6 +32,7 @@ class LaunchThread(QtCore.QThread):
     launch_setup_signal = QtCore.pyqtSignal(str, str,str)
     progress_update_signal = QtCore.pyqtSignal(int, int, str)
     state_update_signal = QtCore.pyqtSignal(bool)
+    message_signal = QtCore.pyqtSignal(str)
 
     version_id = ''
     username = ''
@@ -57,13 +64,42 @@ class LaunchThread(QtCore.QThread):
 
 
     def run(self):
-        self.state_update_signal.emit(True)
-        minecraft_launcher_lib.install.install_minecraft_version(
-            version=self.version_id,
-            minecraft_directory=minecraft_directory,
-            callback={'setStatus': self.update_progress_label, 'setProgress': self.update_progress,
-                      'setMax': self.update_progress_max}
-        )
+
+        if self.type_id.lower() == 'vanilla':
+            minecraft_launcher_lib.install.install_minecraft_version(
+                version=self.version_id,
+                minecraft_directory=minecraft_directory,
+                callback={
+                    'setStatus': self.update_progress_label,
+                    'setProgress': self.update_progress,
+                    'setMax': self.update_progress_max
+                }
+            )
+
+        elif self.type_id.lower() == 'forge':
+            """minecraft_launcher_lib.forge.install_forge_version(
+                self.version_id,
+                minecraft_directory
+            )"""
+            print("Forge пока не реализован")
+
+
+        elif self.type_id.lower() == 'fabric':
+            """
+            minecraft_launcher_lib.fabric.install_fabric(
+                self.version_id,
+                minecraft_directory
+            )"""
+            print("fabric пока не реализован")
+
+        elif self.type_id.lower() == 'neoforge':
+            """
+            minecraft_launcher_lib.neoforge.install_neoforge_version(
+                self.version_id,
+                minecraft_directory
+            )"""
+            print("neoforge пока не реализован")
+
 
         username = self.username
         if self.username == '':
@@ -123,6 +159,8 @@ class Ui_Dialog(object):
         self.Username.setFrame(False)
         self.Username.setCursorPosition(0)
         self.Username.setObjectName("Username")
+        self.Username.textChanged.connect(self.save_settings)
+
 
         self.VersionSelect = QtWidgets.QComboBox(self.groupBox)
         self.VersionSelect.setGeometry(QtCore.QRect(40, 50, 181, 22))
@@ -131,6 +169,7 @@ class Ui_Dialog(object):
         self.VersionSelect.setCurrentText("")
         self.VersionSelect.setObjectName("VersionSelect")
         self.VersionSelect.addItem("Загрузка...")
+        self.VersionSelect.currentTextChanged.connect(self.save_settings)
 
 
 
@@ -224,13 +263,13 @@ class Ui_Dialog(object):
         self.VersionSelect_2.setStyleSheet("background-color: rgb(246, 255, 220);\n"
                                            "font: 63 8pt \"Segoe UI Variable Text Semibold\";")
         self.VersionSelect_2.setObjectName("VersionSelect_2")
-        self.VersionSelect_2.addItem("Vanilla")
-        self.VersionSelect_2.addItem("fabric")
-        self.VersionSelect_2.addItem("Forge")
-        self.VersionSelect_2.addItem("NeoForge")
+        self.VersionSelect_2.addItems(["Vanilla","fabric","Forge","NeoForge"])
+        self.VersionSelect_2.currentTextChanged.connect(self.save_settings)
 
+        settings = self.load_setting()
 
-
+        self.Username.setText(settings.get("username", ""))
+        self.VersionSelect_2.setCurrentText(settings.get("type", "Vanilla"))
 
         self.label_1.raise_()
         self.groupBox_3.raise_()
@@ -249,7 +288,7 @@ class Ui_Dialog(object):
         self.launch_thread = LaunchThread()
         self.launch_thread.state_update_signal.connect(self.state_update)
         self.launch_thread.progress_update_signal.connect(self.update_progress)
-
+       # self.launch_thread.message_signal.connect(self.show_message)
 
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -281,7 +320,7 @@ class Ui_Dialog(object):
         version_id = self.VersionSelect.currentText()
         type_id = self.VersionSelect_2.currentText()
         username = self.Username.text()
-        self.launch_thread.launch_setup_signal.emit(version_id, type_id, username)
+        self.launch_thread.launch_setup_signal.emit(version_id,  username, type_id)
         self.launch_thread.start()
 
 
@@ -308,6 +347,29 @@ class Ui_Dialog(object):
         self.VersionSelect.clear()
         self.VersionSelect.addItems(versions)
         self.VersionSelect.setEnabled(True)  # включаем обратно
+
+    def load_setting(self):
+        if os.path.exists("settings.json"):
+            with open("settings.json", "r") as f:
+                data = json.load(f)
+                return data
+        else:
+            return {}
+
+    def save_settings(self):
+        settings = self.load_setting()
+
+        settings["version"] = self.VersionSelect.currentText()
+        settings["type"] = self.VersionSelect_2.currentText()
+        settings["username"] = self.Username.text()
+
+        with open("settings.json", "w", encoding="utf-8") as f:
+            json.dump(settings, f, indent=4)
+
+    def show_message(self, text):
+        QtWidgets.QMessageBox.warning(self, "Внимание", text)
+
+
 
 if __name__ == "__main__":
     import sys
