@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import os
-
+import sys
 import webbrowser
 import subprocess
 import minecraft_launcher_lib
@@ -15,19 +15,29 @@ minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory().rep
 
 
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS  # PyInstaller
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 class LoadVersion(QtCore.QThread):
     versions_loaded = QtCore.pyqtSignal(list)
 
     def run(self):
-
         installed = minecraft_launcher_lib.utils.get_installed_versions(minecraft_directory)
         installed_versions = [v["id"] for v in installed]
-        installed_versions.insert(0, "---Установленные версии---")
-        installed_versions.append("---Скачать версию---")
-        self.versions_loaded.emit(installed_versions)
 
-        versions = installed_versions.copy()
+        versions = []
+
+        if installed_versions:
+            versions.append("---Установленные версии---")
+            versions.extend(installed_versions)
+
+        versions.append("---Скачать версию---")
 
         for version in minecraft_launcher_lib.utils.get_version_list():
             if version['type'] == 'release':
@@ -183,6 +193,7 @@ class Ui_Dialog(object):
 
 
 
+
         self.progressBar = QtWidgets.QProgressBar(self.groupBox)
         self.progressBar.setGeometry(QtCore.QRect(230, 20, 581, 21))
         self.progressBar.setStyleSheet("color: rgb(215, 250, 255);")
@@ -199,7 +210,7 @@ class Ui_Dialog(object):
         self.label_1 = QtWidgets.QLabel(Dialog)
         self.label_1.setGeometry(QtCore.QRect(0, 0, 941, 621))
         self.label_1.setText("")
-        self.label_1.setPixmap(QtGui.QPixmap("assets/image/mainimage.jpg"))
+        self.label_1.setPixmap(QtGui.QPixmap(resource_path("assets/image/mainimage1.png")))
         self.label_1.setScaledContents(True)
         self.label_1.setObjectName("label_1")
 
@@ -281,6 +292,7 @@ class Ui_Dialog(object):
         self.Username.setText(settings.get("username", ""))
         self.VersionSelect_2.setCurrentText(settings.get("type", "Vanilla"))
 
+
         self.label_1.raise_()
         self.groupBox_3.raise_()
         self.groupBox.raise_()
@@ -359,6 +371,42 @@ class Ui_Dialog(object):
         self.VersionSelect.clear()
         self.VersionSelect.addItems(versions)
         self.VersionSelect.setEnabled(True)  # включаем обратно
+        print("UI получил:", versions)
+        model = self.VersionSelect.model()
+
+        settings = self.load_setting()
+        saved_version = settings.get("version", "")
+
+        if saved_version in versions:
+            self.VersionSelect.setCurrentText(saved_version)
+        else:
+            # fallback — выбрать первую нормальную версию
+            for v in versions:
+                if not v.startswith("---"):
+                    self.VersionSelect.setCurrentText(v)
+                    break
+
+        # ---Установленные версии--- не активиная версия
+        index1 = self.VersionSelect.findText("---Установленные версии---")
+        model.item(index1).setEnabled(False)
+
+        # ---Скачать версию--- не активиная версия
+        index2 = self.VersionSelect.findText("---Скачать версию---")
+        model.item(index2).setEnabled(False)
+
+
+        model = self.VersionSelect.model()
+
+        for text in ["---Установленные версии---", "---Скачать версию---"]:
+            index = self.VersionSelect.findText(text)
+            if index != -1:
+                model.item(index).setEnabled(False)
+
+
+
+        if saved_version in versions:
+            self.VersionSelect.setCurrentText(saved_version)
+
 
     def load_setting(self):
         if os.path.exists("settings.json"):
@@ -369,9 +417,14 @@ class Ui_Dialog(object):
             return {}
 
     def save_settings(self):
+        version = self.VersionSelect.currentText()
+
+        if version.startswith("---") or version == "Загрузка...":
+            return
+
         settings = self.load_setting()
 
-        settings["version"] = self.VersionSelect.currentText()
+        settings["version"] = version
         settings["type"] = self.VersionSelect_2.currentText()
         settings["username"] = self.Username.text()
 
@@ -381,10 +434,8 @@ class Ui_Dialog(object):
     def show_message(self, text):
         QtWidgets.QMessageBox.warning(self, "Внимание", text)
 
-    def on_versions_loaded(self, versions):
-        print("UI получил:", versions)
-        self.VersionSelect.clear()
-        self.VersionSelect.addItems(versions)
+
+
 
 
 
