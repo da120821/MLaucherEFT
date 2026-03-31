@@ -20,11 +20,21 @@ class LoadVersion(QtCore.QThread):
     versions_loaded = QtCore.pyqtSignal(list)
 
     def run(self):
-        versions = []
+
+        installed = minecraft_launcher_lib.utils.get_installed_versions(minecraft_directory)
+        installed_versions = [v["id"] for v in installed]
+        installed_versions.insert(0, "---Установленные версии---")
+        installed_versions.append("---Скачать версию---")
+        self.versions_loaded.emit(installed_versions)
+
+        versions = installed_versions.copy()
+
         for version in minecraft_launcher_lib.utils.get_version_list():
             if version['type'] == 'release':
                 versions.append(version['id'])
+
         self.versions_loaded.emit(versions)
+
 
 
 
@@ -290,6 +300,8 @@ class Ui_Dialog(object):
         self.launch_thread.progress_update_signal.connect(self.update_progress)
        # self.launch_thread.message_signal.connect(self.show_message)
 
+
+
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -368,6 +380,12 @@ class Ui_Dialog(object):
 
     def show_message(self, text):
         QtWidgets.QMessageBox.warning(self, "Внимание", text)
+
+    def on_versions_loaded(self, versions):
+        print("UI получил:", versions)
+        self.VersionSelect.clear()
+        self.VersionSelect.addItems(versions)
+
 
 
 
